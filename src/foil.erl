@@ -89,10 +89,7 @@ load(Namespace) ->
 lookup(Namespace, Key) ->
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
-            {ok,Result} = Module:lookup(Key),
-            Output = binary_to_term(Result),
-            io:format("Before conversion: ~p, after conversion ~p.~n", [Result, Output]),
-            {ok, Output};
+            {ok,Result} = Module:lookup(Key);
         {error, key_not_found} ->
             {error, module_not_found}
     catch
