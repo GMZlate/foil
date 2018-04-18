@@ -56,9 +56,10 @@ delete(Namespace, Key) ->
     ok | error().
 
 insert(Namespace, Key, Value) ->
+    Insert_value = term_to_binary(Value),
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
-            ets:insert(Module, {Key, Value}),
+            ets:insert(Module, {Key, Insert_value}),
             ok;
         {error, key_not_found} ->
             {error, module_not_found}
@@ -88,7 +89,7 @@ load(Namespace) ->
 lookup(Namespace, Key) ->
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
-            Module:lookup(Key);
+            binary_to_term(Module:lookup(Key));
         {error, key_not_found} ->
             {error, module_not_found}
     catch
