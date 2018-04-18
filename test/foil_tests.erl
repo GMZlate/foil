@@ -29,7 +29,9 @@ foil_test() ->
     ok = foil:load(test),
     {error, module_not_found} = foil:load(test2),
 
-    {ok, value} = test_foil:lookup(key),
+    {ok, RESULT} = test_foil:lookup(key),
+    ct:print("~p",[RESULT]),
+    value = RESULT,
     {ok, [<<"foo">>, <<"bar">>]} = foil:lookup(test, key2),
     {ok, {1, 1.234}} = foil:lookup(test, key3),
     {error, module_not_found} = foil:lookup(test2, key),
