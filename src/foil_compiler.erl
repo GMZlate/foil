@@ -58,5 +58,7 @@ to_syntax(Float) when is_float(Float) ->
     erl_syntax:float(Float);
 to_syntax(Integer) when is_integer(Integer) ->
     erl_syntax:integer(Integer);
-to_syntax(Term) ->
-   Binary = term_to_binary(Term),String = erl_syntax:string(binary_to_list(<<"binary_to_term(",Binary,")">>)).
+to_syntax(Term) -> 
+    Binary = term_to_binary(Term),
+    String = erl_syntax:string(binary_to_list(<<"binary_to_term(",Binary,")">>)),
+    erl_syntax:binary([erl_syntax:binary_field(String)]).
