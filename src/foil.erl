@@ -89,7 +89,7 @@ load(Namespace) ->
 lookup(Namespace, Key) ->
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
-            {ok,Result} = Module:lookup(Key),
+            {ok,Result} = Module:lookup(Key);
             %{ok,binary_to_term(Result)};
         {error, key_not_found} ->
             {error, module_not_found}
