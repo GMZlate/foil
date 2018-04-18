@@ -90,9 +90,9 @@ lookup(Namespace, Key) ->
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
             {ok,Result} = Module:lookup(Key),
-            io:fwrite("~p",Result),
+            ct:print("MEAN PROBLEM! ~p~n~n", [Result]),
             Output = binary_to_term(Result),
-            io:fwrite("~p",Output),
+            ct:print("MEAN PROBLEM! ~p~n~n", [Output]),
             {ok, Output};
         {error, key_not_found} ->
             {error, module_not_found}
