@@ -28,8 +28,7 @@ foil_test() ->
 
     ok = foil:load(test),
     {error, module_not_found} = foil:load(test2),
-    Value_bin = term_to_binary(value),
-    {ok, Value_bin} = test_foil:lookup(key),
+    {ok, value} = test_foil:lookup(key),
     {ok, [<<"foo">>, <<"bar">>]} = foil:lookup(test, key2),
     {ok, {1, 1.234}} = foil:lookup(test, key3),
     {error, module_not_found} = foil:lookup(test2, key),
