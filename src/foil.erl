@@ -89,9 +89,12 @@ lookup(Namespace, Key) ->
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
             case Module:lookup(Key) of
-                {ok, Result} -> case lists:sublist(Result, 5) of 
-                                    "#Ref<" -> {ok, list_to_ref(Result)};
-                                    _ -> {ok, Result}
+                {ok, Result} -> case is_list(Result) of
+                                    true -> case lists:sublist(Result, 5) of 
+                                                "#Ref<" -> {ok, list_to_ref(Result)};
+                                                _ -> {ok, Result}
+                                            end;
+                                    false -> {ok, Result}
                                 end;
                 {error, key_not_found} ->{error, key_not_found}
             end;
