@@ -131,7 +131,7 @@ convert([List])->
         false -> [List];
         true -> case lists:sublist(List, 5) of 
                      "#Ref<" ->  [list_to_ref(List)];
-                      _ -> List
+                      _ -> [List]
                 end
     end;           
 convert(List)->
