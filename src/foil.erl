@@ -129,7 +129,7 @@ convert([])->[];
 convert([List])->
     case is_list(List) of 
         false -> [List];
-        true -> case lists:sublist(Result, 5) of 
+        true -> case lists:sublist(List, 5) of 
                      "#Ref<" ->  [list_to_ref(List)];
                       _ -> List
                 end
@@ -137,7 +137,7 @@ convert([List])->
 convert(List)->
     [Head|Tail] = List,
     case is_list(Head) of 
-        true -> case lists:sublist(Result, 5) of 
+        true -> case lists:sublist(List, 5) of 
                      "#Ref<" ->  [list_to_ref(List)|convert(Tail)];
                       _ -> [convert(Head)|convert(Tail)]
                  end;
