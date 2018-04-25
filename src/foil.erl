@@ -139,7 +139,8 @@ convert(List)->
     case is_list(Head) of 
         true -> case lists:sublist(Result, 5) of 
                      "#Ref<" ->  [list_to_ref(List)|convert(Tail)];
-                      _ -> [convert(Head)|convert(Tail)];
+                      _ -> [convert(Head)|convert(Tail)]
+                 end;
         false -> [Head|convert(Tail)]
     end.
 module(Namespace) ->
