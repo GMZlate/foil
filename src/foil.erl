@@ -146,6 +146,7 @@ convert(List)->
                                        end;
                                false -> [Head|convert(Tail)]
                             end;
+                 end;
         false -> List
     end.
 module(Namespace) ->
