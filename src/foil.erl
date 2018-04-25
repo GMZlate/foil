@@ -56,10 +56,9 @@ delete(Namespace, Key) ->
     ok | error().
 
 insert(Namespace, Key, Value) ->
-    Insert_value = term_to_binary(Value),
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
-            ets:insert(Module, {Key, Insert_value}),
+            ets:insert(Module, {Key, Value}),
             ok;
         {error, key_not_found} ->
             {error, module_not_found}
@@ -90,7 +89,10 @@ lookup(Namespace, Key) ->
     try foil_modules:lookup(Namespace) of
         {ok, Module} ->
             case Module:lookup(Key) of
-                {ok, Result} -> {ok, binary_to_term(Result)};
+                {ok, Result} -> case lists:sublist(Result, 5) of 
+                                    "#Ref<" -> {ok, list_to_ref(Result)};
+                                    _ -> {ok, Result}
+                                end;
                 {error, key_not_found} ->{error, key_not_found}
             end;
         {error, key_not_found} ->
