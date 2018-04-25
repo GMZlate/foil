@@ -145,7 +145,7 @@ convert(List)->
                                              _ -> [convert(Head)|convert(Tail)]
                                        end;
                                false -> [Head|convert(Tail)]
-                            end;
+                            end
                  end;
         false -> List
     end.
