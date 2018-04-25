@@ -31,9 +31,10 @@ forms(Module, KVs) ->
 
 lookup_clause(Key, Value) ->
     Var = to_syntax(Key),
-    Body = erl_syntax:tuple([erl_syntax:atom(ok),
-        to_syntax(Value)]),
-    erl_syntax:clause([Var], [], [Body]).
+    Result = case lists:sublist(Value, 5) of 
+                 "#Ref<"  -> {ok, list_to_ref(Value)};
+                 _ -> {ok, Value}
+             end.               
 
 lookup_clause_anon() ->
     Var = erl_syntax:variable("_"),
@@ -58,7 +59,9 @@ to_syntax(Float) when is_float(Float) ->
     erl_syntax:float(Float);
 to_syntax(Integer) when is_integer(Integer) ->
     erl_syntax:integer(Integer);
-to_syntax(Term) -> 
-    Binary = term_to_binary(Term),
-    String = erl_syntax:string(binary_to_list(<<"binary_to_term(",Binary,")">>)),
-    erl_syntax:binary([erl_syntax:binary_field(String)]).
+to_syntax(Reference) when is_reference(Reference)->
+    to_syntax(ref_to_list(Reference));
+to_syntax(List) when is_list(List) ->
+    erl_syntax:list([to_syntax(X) || X <- List]);
+to_syntax(Tuple) when is_tuple(Tuple) ->
+    erl_syntax:tuple([to_syntax(X) || X <- tuple_to_list(Tuple)]).
