@@ -92,7 +92,7 @@ lookup(Namespace, Key) ->
                 {ok, Result} -> case is_list(Result) of
                                     true -> case lists:sublist(Result, 5) of 
                                                 "#Ref<" -> {ok, list_to_ref(Result)};
-                                                _ -> {ok, Result}
+                                                _ -> {ok, convert(Result)}
                                             end;
                                     false -> {ok, Result}
                                 end;
@@ -125,5 +125,22 @@ new(Namespace) ->
             {error, foil_not_started}
     end.
 %% private
+convert([])->[];
+convert([List])->
+    case is_list(List) of 
+        false -> [List];
+        true -> case lists:sublist(Result, 5) of 
+                     "#Ref<" ->  [list_to_ref(List)];
+                      _ -> List
+                end
+    end;           
+convert(List)->
+    [Head|Tail] = List,
+    case is_list(Head) of 
+        true -> case lists:sublist(Result, 5) of 
+                     "#Ref<" ->  [list_to_ref(List)|convert(Tail)];
+                      _ -> [convert(Head)|convert(Tail)];
+        false -> [Head|convert(Tail)]
+    end.
 module(Namespace) ->
     list_to_atom(atom_to_list(Namespace) ++ "_foil").
