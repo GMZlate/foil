@@ -16,11 +16,12 @@ foil_test() ->
 
     ok = foil:new(test),
     {error, module_exists} = foil:new(test),
-
+    Ref = make_ref(),
     ok = foil:insert(test, key, value),
     ok = foil:insert(test, key2, [<<"foo">>, <<"bar">>]),
     ok = foil:insert(test, key3, {1, 1.234}),
     ok = foil:insert(test, key4, "test"),
+    ok = foil:insert(test, key5, Ref),
     {error, module_not_found} = foil:insert(test2, key2, value),
 
     ok = foil:delete(test, key4),
@@ -31,6 +32,7 @@ foil_test() ->
     {ok, value} = test_foil:lookup(key),
     {ok, [<<"foo">>, <<"bar">>]} = foil:lookup(test, key2),
     {ok, {1, 1.234}} = foil:lookup(test, key3),
+    {ok, Ref} = foil:lookup(test, key5),
     {error, module_not_found} = foil:lookup(test2, key),
     {error, key_not_found} = foil:lookup(test, key4),
 
