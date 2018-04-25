@@ -135,13 +135,18 @@ convert([List])->
                 end
     end;           
 convert(List)->
-    [Head|Tail] = List,
-    case is_list(Head) of 
+    case is_list(List) of 
         true -> case lists:sublist(List, 5) of 
-                     "#Ref<" ->  [list_to_ref(List)|convert(Tail)];
-                      _ -> [convert(Head)|convert(Tail)]
-                 end;
-        false -> [Head|convert(Tail)]
+                     "#Ref<" ->  list_to_ref(List);
+                      _ -> [Head|Tail] = List,
+                            case is_list(Head) of 
+                               true -> case lists:sublist(Head, 5) of 
+                                             "#Ref<" ->  [list_to_ref(Head)|convert(Tail)];
+                                             _ -> [convert(Head)|convert(Tail)]
+                                       end;
+                               false -> [Head|convert(Tail)]
+                            end;
+        false -> List
     end.
 module(Namespace) ->
     list_to_atom(atom_to_list(Namespace) ++ "_foil").
