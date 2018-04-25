@@ -31,10 +31,9 @@ forms(Module, KVs) ->
 
 lookup_clause(Key, Value) ->
     Var = to_syntax(Key),
-    Result = case lists:sublist(Value, 5) of 
-                 "#Ref<"  -> {ok, list_to_ref(Value)};
-                 _ -> {ok, Value}
-             end.               
+    Body = erl_syntax:tuple([erl_syntax:atom(ok),
+                            to_syntax(Value)]),
+    erl_syntax:clause([Var], [], [Body]).              
 
 lookup_clause_anon() ->
     Var = erl_syntax:variable("_"),
